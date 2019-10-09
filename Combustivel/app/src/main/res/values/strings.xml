@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Combustivel</string>
+    <string name="main_image_description">Imagem da gasolina versus o álcool</string>
+    <string name="main_lbl_apresentacao">App para Calcular qual combustivel têm melhor rendimento com base no seu preço</string>
+    <string name="main_hint_alcool">Preço do álcool</string>
+    <string name="main_txt_description_alcool">Valor do álcool</string>
+    <string name="main_hint_gasolina">Preço da gasolina</string>
+    <string name="main_txt_description_gasolina">Valor da  gasolina</string>
+    <string name="main_btn_calcular">Calcular</string>
+    <string name="main_bt_description_calcular">Botão para Calcular a melhor escolha</string>
+    <string name="main_txt_resultado">Resultado do Cálculo</string>
+    <string name="main_lbl_description_resultado">Texto com o resultado do cálculo</string>
+</resources>
