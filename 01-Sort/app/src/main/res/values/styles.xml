@@ -1,0 +1,35 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="MainCounter">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorMainCounter</item>
+        <item name="android:text">@string/main_not_running</item>
+    </style>
+
+    <style name="MainFloatButton">
+        <item name="srcCompat">@android:drawable/ic_media_play</item>
+        <item name="backgroundTint">@color/colorMainFloatButton</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_marginEnd">36dp</item>
+        <item name="android:layout_marginBottom">36dp</item>
+    </style>
+
+    <style name="MainButton" parent="MainFloatButton">
+        <item name="android:drawableBottom">@android:drawable/ic_menu_slideshow</item>
+        <item name="android:drawablePadding">-16sp</item>
+        <item name="backgroundTint">@color/colorMainFloatButton</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_marginEnd">36dp</item>
+        <item name="android:layout_marginStart">36dp</item>
+    </style>
+
+</resources>
