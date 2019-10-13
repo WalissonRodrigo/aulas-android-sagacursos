@@ -1,12 +1,12 @@
 package br.com.cursosaga.pdm.velha.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -26,10 +26,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static int[][] optionsWin = {{11, 12, 13}, {21, 22, 23}, {31, 32, 33}, {11, 22, 33}, {13, 22, 31}, {11, 21, 31}, {12, 22, 32}, {13, 23, 33}};
     private static boolean winner = false;
     private Runnable JogaIA;
+    private String playerName;
+    private int playerOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        playerName = getIntent().getStringExtra("name");
+        playerOption = getIntent().getIntExtra("option", R.drawable.xis_velha);
         setContentView(R.layout.activity_main);
         instanciarImagens();
         limparTabuleiro();
@@ -52,8 +56,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void usuarioJoga(int valor, ImageView img) {
         if (listaJogadas.contains(valor) && winner == false) {
-            listaJogadas.remove(listaJogadas.indexOf(valor));
-            img.setImageResource(XIS);
+            listaJogadas.remove((Integer) valor);
+            if (playerOption == XIS)
+                img.setImageResource(XIS);
+            else
+                img.setImageResource(CIRCULO);
             jogadasPlayer.add(valor);
             validaGanhador(1);
             new Thread(IAJoga()).start();
@@ -81,9 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void vencedor(int jogador) {
         //atualiza na tela quem foi o ganhador da vez.
         if(jogador == 1)
-            Toast.makeText(getApplicationContext(), "JOGADOR 1 GANHOU!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "JOGADOR " + playerName.toUpperCase() + " GANHOU!", Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(getApplicationContext(), "JOGADOR 2 GANHOU!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "JOGADOR " + playerName.toUpperCase() + " PERDEU!", Toast.LENGTH_LONG).show();
         btnTryAgain.setVisibility(View.VISIBLE);
     }
 
@@ -94,10 +101,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (jogado.contains(jogada[0]) && jogado.contains(jogada[1]) && jogado.contains(jogada[2]))
             {
                 //winner = true;
-                this.winner = true;
+                winner = true;
             }
         }
-        return this.winner;
+        return winner;
     }
 
     @Override
@@ -158,35 +165,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void run() {
                             int value = listaJogadas.get(new Random().nextInt(listaJogadas.size()));
                             if (listaJogadas.contains(value)) {
-                                listaJogadas.remove(listaJogadas.indexOf(value));
+                                listaJogadas.remove((Integer) value);
                                 jogadasMachine.add(value);
                                 switch (value) {
                                     case 11:
-                                        img11.setImageResource(CIRCULO);
+                                        if (playerOption == XIS)
+                                            img11.setImageResource(CIRCULO);
+                                        else
+                                            img11.setImageResource(XIS);
                                         break;
                                     case 12:
-                                        img12.setImageResource(CIRCULO);
+                                        if (playerOption == XIS)
+                                            img12.setImageResource(CIRCULO);
+                                        else
+                                            img12.setImageResource(XIS);
                                         break;
                                     case 13:
-                                        img13.setImageResource(CIRCULO);
+                                        if (playerOption == XIS)
+                                            img13.setImageResource(CIRCULO);
+                                        else
+                                            img13.setImageResource(XIS);
                                         break;
                                     case 21:
-                                        img21.setImageResource(CIRCULO);
+                                        if (playerOption == XIS)
+                                            img21.setImageResource(CIRCULO);
+                                        else
+                                            img21.setImageResource(XIS);
                                         break;
                                     case 22:
-                                        img22.setImageResource(CIRCULO);
+                                        if (playerOption == XIS)
+                                            img22.setImageResource(CIRCULO);
+                                        else
+                                            img22.setImageResource(XIS);
                                         break;
                                     case 23:
-                                        img23.setImageResource(CIRCULO);
+                                        if (playerOption == XIS)
+                                            img23.setImageResource(CIRCULO);
+                                        else
+                                            img23.setImageResource(XIS);
                                         break;
                                     case 31:
-                                        img31.setImageResource(CIRCULO);
+                                        if (playerOption == XIS)
+                                            img31.setImageResource(CIRCULO);
+                                        else
+                                            img31.setImageResource(XIS);
                                         break;
                                     case 32:
-                                        img32.setImageResource(CIRCULO);
+                                        if (playerOption == XIS)
+                                            img32.setImageResource(CIRCULO);
+                                        else
+                                            img32.setImageResource(XIS);
                                         break;
                                     case 33:
-                                        img33.setImageResource(CIRCULO);
+                                        if (playerOption == XIS)
+                                            img33.setImageResource(CIRCULO);
+                                        else
+                                            img33.setImageResource(XIS);
                                         break;
                                     default:
                                         break;
