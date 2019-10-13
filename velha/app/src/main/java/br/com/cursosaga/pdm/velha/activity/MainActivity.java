@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import br.com.cursosaga.pdm.velha.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView img11, img12, img13, img21, img22, img23, img31, img32, img33;
+    private TextView txtVitoria, txtDerrota, txtEmpate, txtNomeJogador;
     private static Button btnTryAgain;
     private static final int CIRCULO = R.drawable.circulo_velha;
     private static final int XIS = R.drawable.xis_velha;
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final static int[] options = {11, 12, 13, 21, 22, 23, 31, 32, 33};
     private static int[][] optionsWin = {{11, 12, 13}, {21, 22, 23}, {31, 32, 33}, {11, 22, 33}, {13, 22, 31}, {11, 21, 31}, {12, 22, 32}, {13, 23, 33}};
     private static boolean winner = false;
+    private static int vitoria, derrota, empate = 0;
     private Runnable JogaIA;
     private String playerName;
     private int playerOption;
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playerName = getIntent().getStringExtra("name");
         playerOption = getIntent().getIntExtra("option", R.drawable.xis_velha);
         setContentView(R.layout.activity_main);
-        instanciarImagens();
+        instanciarObjetos();
         limparTabuleiro();
         iniciaListaJogadas();
     }
@@ -87,20 +90,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void vencedor(int jogador) {
         //atualiza na tela quem foi o ganhador da vez.
-        if(jogador == 1)
+        if (jogador == 1) {
+            vitoria++;
             Toast.makeText(getApplicationContext(), "JOGADOR " + playerName.toUpperCase() + " GANHOU!", Toast.LENGTH_LONG).show();
-        else
+        } else {
+            derrota++;
             Toast.makeText(getApplicationContext(), "JOGADOR " + playerName.toUpperCase() + " PERDEU!", Toast.LENGTH_LONG).show();
+        }
+        atualizaPlacar();
         btnTryAgain.setVisibility(View.VISIBLE);
     }
 
     private boolean checkWin(ArrayList<Integer> jogado) {
-        //boolean winner = false;
         // For usando : é o mesmo que ForEach em outras linguagens
         for (int[] jogada : optionsWin) {
-            if (jogado.contains(jogada[0]) && jogado.contains(jogada[1]) && jogado.contains(jogada[2]))
-            {
-                //winner = true;
+            if (jogado.contains(jogada[0]) && jogado.contains(jogada[1]) && jogado.contains(jogada[2])) {
                 winner = true;
             }
         }
@@ -146,10 +150,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (listaJogadas.isEmpty() && winner == false) {
             btnTryAgain.setVisibility(View.VISIBLE);
+            empate++;
+            atualizaPlacar();
             Toast.makeText(getApplicationContext(), "DEU VELHA! JOGUE NOVAMENTE...", Toast.LENGTH_LONG).show();
         }
     }
 
+    private void atualizaPlacar(){
+        txtVitoria.setText("Vitórias: " + vitoria);
+        txtDerrota.setText("Derrotas: " + derrota);
+        txtEmpate.setText("Empates: " + empate);
+    }
     private Runnable IAJoga() {
         Runnable runIA = new Runnable() {
             @Override
@@ -236,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return runIA;
     }
 
-    private void instanciarImagens() {
+    private void instanciarObjetos() {
         img11 = findViewById(R.id.img11);
         img11.setOnClickListener(this);
 
@@ -266,6 +277,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnTryAgain = findViewById(R.id.btnTryAgain);
         btnTryAgain.setOnClickListener(this);
+
+        txtNomeJogador = findViewById(R.id.txtName);
+        txtNomeJogador.setText(playerName);
+
+        txtVitoria = findViewById(R.id.txtVitorias);
+        txtVitoria.setText("Vitórias: " + vitoria);
+
+        txtDerrota = findViewById(R.id.txtDerrotas);
+        txtDerrota.setText("Derrotas: " + derrota);
+
+        txtEmpate = findViewById(R.id.txtEmpates);
+        txtEmpate.setText("Empates: " + empate);
     }
 
     private void limparTabuleiro() {
