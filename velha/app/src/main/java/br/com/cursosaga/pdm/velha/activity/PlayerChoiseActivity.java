@@ -22,6 +22,7 @@ public class PlayerChoiseActivity extends AppCompatActivity {
     private ImageView imgChoised;
     private int playerOption = 0;
     private String playerName;
+    private boolean firstStart = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class PlayerChoiseActivity extends AppCompatActivity {
                     intensao.putExtra("name", playerName);
                     intensao.putExtra("option", playerOption);
                     startActivity(intensao);
+                    firstStart = false;
                 } else {
                     Toast.makeText(getApplicationContext(), "O nome ou a opção não foi preenchido!", Toast.LENGTH_LONG).show();
                     return;
@@ -67,5 +69,19 @@ public class PlayerChoiseActivity extends AppCompatActivity {
                 imgChoised.setImageResource(playerOption);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        if (!firstStart) {
+            rgOption.clearCheck();
+            txtName.setText(null);
+            txtName.clearFocus();
+            playerName = null;
+            playerOption = 0;
+            imgChoised.setImageDrawable(null);
+            firstStart = true;
+        }
+        super.onStart();
     }
 }

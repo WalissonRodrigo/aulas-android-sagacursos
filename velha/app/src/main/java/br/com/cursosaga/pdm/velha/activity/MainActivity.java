@@ -1,5 +1,6 @@
 package br.com.cursosaga.pdm.velha.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -7,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -311,5 +313,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         img33.setImageDrawable(null);
         img33.setEnabled(true);
         btnTryAgain.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onStop() {
+        vitoria = 0;
+        derrota = 0;
+        empate = 0;
+        playerName = null;
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        Bundle savedIntance = getIntent().getBundleExtra("savedState");
+        if(savedIntance != null) {
+            playerName = savedIntance.getString("player");
+            playerOption = savedIntance.getInt("playerOption");
+            vitoria = savedIntance.getInt("vitoria");
+            derrota = savedIntance.getInt("derrota");
+            empate = savedIntance.getInt("empate");
+        }
+        super.onStart();
+        Toast.makeText(getApplicationContext(), "JOGADOR " + playerName + "\nOPÇÃO: " + optionsWin + "\nVITORIAS: "+vitoria +"\nDERROTAS: "+derrota, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onPause() {
+        Bundle outState = new Bundle();
+        outState.putString("player", playerName);
+        outState.putInt("playerOption", playerOption);
+        outState.putInt("vitoria", vitoria);
+        outState.putInt("derrota", derrota);
+        outState.putInt("empate", empate);
+        getIntent().putExtra("savedState", outState);
+        super.onPause();
     }
 }
