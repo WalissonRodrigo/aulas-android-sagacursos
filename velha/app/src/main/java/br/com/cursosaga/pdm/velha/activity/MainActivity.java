@@ -1,255 +1,163 @@
 package br.com.cursosaga.pdm.velha.activity;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import br.com.cursosaga.pdm.velha.R;
+import br.com.cursosaga.pdm.velha.model.Game;
+import br.com.cursosaga.pdm.velha.model.Player;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private ImageView img11, img12, img13, img21, img22, img23, img31, img32, img33;
-    private TextView txtVitoria, txtDerrota, txtEmpate, txtNomeJogador;
-    private static Button btnTryAgain;
+    private ImageView img11, img12, img13, img21, img22, img23, img31, img32, img33, btnTryAgain;
+    private TextView txtVictory, txtFail, txtDraw, txtPlayerName;
     private static final int CIRCULO = R.drawable.circulo_velha;
     private static final int XIS = R.drawable.xis_velha;
-    //private static int[] randomOption = {CIRCULO, XIS};
-    private static ArrayList<Integer> listaJogadas;
-    private static ArrayList<Integer> jogadasPlayer;
-    private static ArrayList<Integer> jogadasMachine;
-    private final static int[] options = {11, 12, 13, 21, 22, 23, 31, 32, 33};
-    private static int[][] optionsWin = {{11, 12, 13}, {21, 22, 23}, {31, 32, 33}, {11, 22, 33}, {13, 22, 31}, {11, 21, 31}, {12, 22, 32}, {13, 23, 33}};
-    private static boolean winner = false;
-    private static int vitoria, derrota, empate = 0;
-    private Runnable JogaIA;
-    private String playerName;
-    private int playerOption;
+    private static int lastId;
+    private Player player1;
+    private Player player2;
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        playerName = getIntent().getStringExtra("name");
-        playerOption = getIntent().getIntExtra("option", R.drawable.xis_velha);
         setContentView(R.layout.activity_main);
-        instanciarObjetos();
-        limparTabuleiro();
-        iniciaListaJogadas();
-    }
-
-    private void iniciaListaJogadas() {
-        listaJogadas = new ArrayList<Integer>();
-        listaJogadas.clear();
-        for (int x : options) {
-            listaJogadas.add(x);
-        }
-        jogadasMachine = new ArrayList<Integer>();
-        jogadasMachine.clear();
-
-        jogadasPlayer = new ArrayList<Integer>();
-        jogadasPlayer.clear();
-        winner = false;
-    }
-
-    private void usuarioJoga(int valor, ImageView img) {
-        if (listaJogadas.contains(valor) && winner == false) {
-            listaJogadas.remove((Integer) valor);
-            if (playerOption == XIS)
-                img.setImageResource(XIS);
-            else
-                img.setImageResource(CIRCULO);
-            jogadasPlayer.add(valor);
-            validaGanhador(1);
-            new Thread(IAJoga()).start();
-        }
-    }
-
-    private void validaGanhador(int jogador) {
-        if (jogador == 1) {
-            if (jogadasPlayer.size() >= 3) {
-                if (checkWin(jogadasPlayer)) {
-                    vencedor(jogador);
-                    return;
-                }
-            }
-        } else {
-            if (jogadasMachine.size() >= 3) {
-                if (checkWin(jogadasMachine)) {
-                    vencedor(jogador);
-                    return;
-                }
-            }
-        }
-    }
-
-    private void vencedor(int jogador) {
-        //atualiza na tela quem foi o ganhador da vez.
-        if (jogador == 1) {
-            vitoria++;
-            Toast.makeText(getApplicationContext(), "JOGADOR " + playerName.toUpperCase() + " GANHOU!", Toast.LENGTH_LONG).show();
-        } else {
-            derrota++;
-            Toast.makeText(getApplicationContext(), "JOGADOR " + playerName.toUpperCase() + " PERDEU!", Toast.LENGTH_LONG).show();
-        }
-        atualizaPlacar();
-        btnTryAgain.setVisibility(View.VISIBLE);
-    }
-
-    private boolean checkWin(ArrayList<Integer> jogado) {
-        // For usando : é o mesmo que ForEach em outras linguagens
-        for (int[] jogada : optionsWin) {
-            if (jogado.contains(jogada[0]) && jogado.contains(jogada[1]) && jogado.contains(jogada[2])) {
-                winner = true;
-            }
-        }
-        return winner;
+        startGame();
+        instantiateObjects();
+        clearBoard();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img11:
-                usuarioJoga(11, img11);
+                game.userPlays(11, img11);
                 break;
             case R.id.img12:
-                usuarioJoga(12, img12);
+                game.userPlays(12, img12);
                 break;
             case R.id.img13:
-                usuarioJoga(13, img13);
+                game.userPlays(13, img13);
                 break;
             case R.id.img21:
-                usuarioJoga(21, img21);
+                game.userPlays(21, img21);
                 break;
             case R.id.img22:
-                usuarioJoga(22, img22);
+                game.userPlays(22, img22);
                 break;
             case R.id.img23:
-                usuarioJoga(23, img23);
+                game.userPlays(23, img23);
                 break;
             case R.id.img31:
-                usuarioJoga(31, img31);
+                game.userPlays(31, img31);
                 break;
             case R.id.img32:
-                usuarioJoga(32, img32);
+                game.userPlays(32, img32);
                 break;
             case R.id.img33:
-                usuarioJoga(33, img33);
+                game.userPlays(33, img33);
                 break;
             case R.id.btnTryAgain:
-                iniciaListaJogadas();
-                limparTabuleiro();
+                startGame();
+                clearBoard();
                 break;
             default:
                 break;
         }
-        if (listaJogadas.isEmpty() && winner == false) {
-            btnTryAgain.setVisibility(View.VISIBLE);
-            empate++;
-            atualizaPlacar();
-            Toast.makeText(getApplicationContext(), "DEU VELHA! JOGUE NOVAMENTE...", Toast.LENGTH_LONG).show();
+        if (game.canPlay) {
+            if (game.getCurrentPlayer().getId() == 0)
+                IAPlay();
+            game.changeTurn();
+            if (game.winner == true)
+                btnTryAgain.setVisibility(View.VISIBLE);
+            if (game.playedList.isEmpty() && game.winner == false)
+                btnTryAgain.setVisibility(View.VISIBLE);
+            updateScoreboard();
         }
     }
 
-    private void atualizaPlacar(){
-        txtVitoria.setText("Vitórias: " + vitoria);
-        txtDerrota.setText("Derrotas: " + derrota);
-        txtEmpate.setText("Empates: " + empate);
-    }
-    private Runnable IAJoga() {
-        Runnable runIA = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if ((listaJogadas.size() > 0 || !listaJogadas.isEmpty()) && winner == false) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            int value = listaJogadas.get(new Random().nextInt(listaJogadas.size()));
-                            if (listaJogadas.contains(value)) {
-                                listaJogadas.remove((Integer) value);
-                                jogadasMachine.add(value);
-                                switch (value) {
-                                    case 11:
-                                        if (playerOption == XIS)
-                                            img11.setImageResource(CIRCULO);
-                                        else
-                                            img11.setImageResource(XIS);
-                                        break;
-                                    case 12:
-                                        if (playerOption == XIS)
-                                            img12.setImageResource(CIRCULO);
-                                        else
-                                            img12.setImageResource(XIS);
-                                        break;
-                                    case 13:
-                                        if (playerOption == XIS)
-                                            img13.setImageResource(CIRCULO);
-                                        else
-                                            img13.setImageResource(XIS);
-                                        break;
-                                    case 21:
-                                        if (playerOption == XIS)
-                                            img21.setImageResource(CIRCULO);
-                                        else
-                                            img21.setImageResource(XIS);
-                                        break;
-                                    case 22:
-                                        if (playerOption == XIS)
-                                            img22.setImageResource(CIRCULO);
-                                        else
-                                            img22.setImageResource(XIS);
-                                        break;
-                                    case 23:
-                                        if (playerOption == XIS)
-                                            img23.setImageResource(CIRCULO);
-                                        else
-                                            img23.setImageResource(XIS);
-                                        break;
-                                    case 31:
-                                        if (playerOption == XIS)
-                                            img31.setImageResource(CIRCULO);
-                                        else
-                                            img31.setImageResource(XIS);
-                                        break;
-                                    case 32:
-                                        if (playerOption == XIS)
-                                            img32.setImageResource(CIRCULO);
-                                        else
-                                            img32.setImageResource(XIS);
-                                        break;
-                                    case 33:
-                                        if (playerOption == XIS)
-                                            img33.setImageResource(CIRCULO);
-                                        else
-                                            img33.setImageResource(XIS);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                validaGanhador(2);
-                            }
-                        }
-                    });
-                }
-            }
-        };
-
-        return runIA;
+    private void IAPlay() {
+        Player player = game.getCurrentPlayer();
+        int value = player.getPlayerMovesList().get(player.getPlayerMovesList().size() - 1);
+        game.playedList.remove((Integer) value);
+        switch (value) {
+            case 11:
+                if (game.machine.getChoise() == XIS)
+                    img11.setImageResource(XIS);
+                else
+                    img11.setImageResource(CIRCULO);
+                break;
+            case 12:
+                if (game.machine.getChoise() == XIS)
+                    img12.setImageResource(XIS);
+                else
+                    img12.setImageResource(CIRCULO);
+                break;
+            case 13:
+                if (game.machine.getChoise() == XIS)
+                    img13.setImageResource(XIS);
+                else
+                    img13.setImageResource(CIRCULO);
+                break;
+            case 21:
+                if (game.machine.getChoise() == XIS)
+                    img21.setImageResource(XIS);
+                else
+                    img21.setImageResource(CIRCULO);
+                break;
+            case 22:
+                if (game.machine.getChoise() == XIS)
+                    img22.setImageResource(XIS);
+                else
+                    img22.setImageResource(CIRCULO);
+                break;
+            case 23:
+                if (game.machine.getChoise() == XIS)
+                    img23.setImageResource(XIS);
+                else
+                    img23.setImageResource(CIRCULO);
+                break;
+            case 31:
+                if (game.machine.getChoise() == XIS)
+                    img31.setImageResource(XIS);
+                else
+                    img31.setImageResource(CIRCULO);
+                break;
+            case 32:
+                if (game.machine.getChoise() == XIS)
+                    img32.setImageResource(XIS);
+                else
+                    img32.setImageResource(CIRCULO);
+                break;
+            case 33:
+                if (game.machine.getChoise() == XIS)
+                    img33.setImageResource(XIS);
+                else
+                    img33.setImageResource(CIRCULO);
+                break;
+            default:
+                break;
+        }
+        game.validateWinner();
     }
 
-    private void instanciarObjetos() {
+    private void updateScoreboard() {
+        Player player = game.getCurrentPlayer();
+        txtPlayerName.setText(player.getName());
+        txtVictory.setText(getResources().getString(R.string.message_victory) + " " + player.getVictory());
+        txtFail.setText(getResources().getString(R.string.message_fail) + " " + player.getFail());
+        txtDraw.setText(getResources().getString(R.string.message_draw) + " " + player.getDraw());
+    }
+
+    private void instantiateObjects() {
         img11 = findViewById(R.id.img11);
         img11.setOnClickListener(this);
 
@@ -280,20 +188,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnTryAgain = findViewById(R.id.btnTryAgain);
         btnTryAgain.setOnClickListener(this);
 
-        txtNomeJogador = findViewById(R.id.txtName);
-        txtNomeJogador.setText(playerName);
+        txtPlayerName = findViewById(R.id.txtName);
+        txtPlayerName.setText(game.getCurrentPlayer().getName());
 
-        txtVitoria = findViewById(R.id.txtVitorias);
-        txtVitoria.setText("Vitórias: " + vitoria);
+        txtVictory = findViewById(R.id.txtVictories);
+        txtVictory.setText(getResources().getString(R.string.message_victory) + game.getCurrentPlayer().getVictory());
 
-        txtDerrota = findViewById(R.id.txtDerrotas);
-        txtDerrota.setText("Derrotas: " + derrota);
+        txtFail = findViewById(R.id.txtFails);
+        txtFail.setText(getResources().getString(R.string.message_fail) + game.getCurrentPlayer().getFail());
 
-        txtEmpate = findViewById(R.id.txtEmpates);
-        txtEmpate.setText("Empates: " + empate);
+        txtDraw = findViewById(R.id.txtDraws);
+        txtDraw.setText(getResources().getString(R.string.message_draw) + game.getCurrentPlayer().getDraw());
     }
 
-    private void limparTabuleiro() {
+    private void clearBoard() {
         img11.setImageDrawable(null);
         img11.setEnabled(true);
         img12.setImageDrawable(null);
@@ -315,37 +223,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnTryAgain.setVisibility(View.GONE);
     }
 
+    private void startGame() {
+        if (player1 == null)
+            player1 = (Player) getIntent().getSerializableExtra("player1");
+        if (player2 == null)
+            player2 = (Player) getIntent().getSerializableExtra("player2");
+        if (game == null) {
+            if (player2 == null) {
+                game = new Game(getApplicationContext(), player1);
+                player1.setTurn(1);
+            } else
+                game = new Game(getApplicationContext(), player1, player2);
+        }
+        game.initializePlayedList();
+    }
+
+
     @Override
     protected void onStop() {
-        vitoria = 0;
-        derrota = 0;
-        empate = 0;
-        playerName = null;
+        player1 = new Player();
+        game = new Game(getApplicationContext(), player1);
         super.onStop();
     }
 
     @Override
     protected void onStart() {
         Bundle savedIntance = getIntent().getBundleExtra("savedState");
-        if(savedIntance != null) {
-            playerName = savedIntance.getString("player");
-            playerOption = savedIntance.getInt("playerOption");
-            vitoria = savedIntance.getInt("vitoria");
-            derrota = savedIntance.getInt("derrota");
-            empate = savedIntance.getInt("empate");
+        if (savedIntance != null) {
+            player1 = (Player) savedIntance.getSerializable("player1");
+            player2 = (Player) savedIntance.getSerializable("player2");
+            game = (Game) savedIntance.getSerializable("game");
         }
         super.onStart();
-        Toast.makeText(getApplicationContext(), "JOGADOR " + playerName + "\nOPÇÃO: " + optionsWin + "\nVITORIAS: "+vitoria +"\nDERROTAS: "+derrota, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), getResources().getString(R.string.display_prefix_player_name) + player.getName() + "\n" + getResources().getString(R.string.message_option) + player.getChoise() + "\n" + getResources().getString(R.string.message_fail) + victory + "\n" + getResources().getString(R.string.message_fail) + fail, Toast.LENGTH_LONG).show();
     }
 
     @Override
     protected void onPause() {
         Bundle outState = new Bundle();
-        outState.putString("player", playerName);
-        outState.putInt("playerOption", playerOption);
-        outState.putInt("vitoria", vitoria);
-        outState.putInt("derrota", derrota);
-        outState.putInt("empate", empate);
+        outState.putSerializable("player1", player1);
+        outState.putSerializable("player2", player2);
+        outState.putSerializable("game", game);
         getIntent().putExtra("savedState", outState);
         super.onPause();
     }

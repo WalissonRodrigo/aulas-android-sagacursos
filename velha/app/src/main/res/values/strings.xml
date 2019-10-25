@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">Velha</string>
+    <string name="app_name">Tic Tac Toe</string>
+    <string name="message_victory">Victory:</string>
+    <string name="message_fail">Fail:</string>
+    <string name="message_draw">Draw:</string>
+    <string name="message_draw_to_user">GOT OLD! PLAY AGAIN ...</string>
+    <string name="display_prefix_player_name">PLAYER</string>
+    <string name="message_player_winner">WINNER!</string>
+    <string name="message_player_fail">FAIL!</string>
+    <string name="player_name">Player Name</string>
+    <string name="button_start_match">Start Match</string>
+    <string name="message_option">OPTIONS:</string>
+    <string name="message_error_choise_player">The name or option was not filled in!</string>
 </resources>

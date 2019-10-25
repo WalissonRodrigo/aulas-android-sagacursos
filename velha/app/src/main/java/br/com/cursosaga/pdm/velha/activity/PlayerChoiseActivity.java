@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
 import br.com.cursosaga.pdm.velha.R;
+import br.com.cursosaga.pdm.velha.model.Player;
 
 public class PlayerChoiseActivity extends AppCompatActivity {
 
@@ -20,14 +21,14 @@ public class PlayerChoiseActivity extends AppCompatActivity {
     private RadioGroup rgOption;
     private TextInputEditText txtName;
     private ImageView imgChoised;
-    private int playerOption = 0;
-    private String playerName;
+    private Player player;
     private boolean firstStart = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_choise);
+        player = new Player();
         //instanciação dos elementos recuperando a instância da tela pelo id na classe R
         btStartGame = findViewById(R.id.btStartGame);
         rgOption = findViewById(R.id.rgOption);
@@ -39,15 +40,16 @@ public class PlayerChoiseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Inicar a nova activity passando os Parametros
-                playerName = txtName.getText().toString();
-                if (!playerName.isEmpty() || playerOption > 0) {
+                player.setName(txtName.getText().toString());
+                if (!player.getName().isEmpty() && player.getChoise() > 0) {
+                    player.setId(1);
+                    player.setTurn(1);
                     Intent intensao = new Intent(getApplicationContext(), MainActivity.class);
-                    intensao.putExtra("name", playerName);
-                    intensao.putExtra("option", playerOption);
+                    intensao.putExtra("player1", player);
                     startActivity(intensao);
                     firstStart = false;
                 } else {
-                    Toast.makeText(getApplicationContext(), "O nome ou a opção não foi preenchido!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getResources().getText(R.string.message_error_choise_player), Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -58,15 +60,15 @@ public class PlayerChoiseActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.rbCIRCULO:
-                        playerOption = R.drawable.circulo_velha;
+                        player.setChoise(R.drawable.circulo_velha);
                         break;
                     case R.id.rbXIS:
-                        playerOption = R.drawable.xis_velha;
+                        player.setChoise(R.drawable.xis_velha);
                         break;
                     default:
                         break;
                 }
-                imgChoised.setImageResource(playerOption);
+                imgChoised.setImageResource(player.getChoise());
             }
         });
     }
@@ -77,8 +79,7 @@ public class PlayerChoiseActivity extends AppCompatActivity {
             rgOption.clearCheck();
             txtName.setText(null);
             txtName.clearFocus();
-            playerName = null;
-            playerOption = 0;
+            player = new Player();
             imgChoised.setImageDrawable(null);
             firstStart = true;
         }

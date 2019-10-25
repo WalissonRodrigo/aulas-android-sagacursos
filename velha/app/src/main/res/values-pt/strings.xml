@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name"> Jogo da Velha </string>
+    <string name="message_victory"> Vitória: </string>
+    <string name="message_fail"> Derrota: </string>
+    <string name="message_draw"> Empate: </string>
+    <string name="message_draw_to_user"> DEU VELHA! JOGUE NOVAMENTE ... </string>
+    <string name="display_prefix_player_name"> JOGADOR </string>
+    <string name="message_player_winner"> VENCEDOR! </string>
+    <string name="message_player_fail"> PERDEU! </string>
+    <string name="player_name"> Nome do Jogador </string>
+    <string name="button_start_match"> Iniciar Partida </string>
+    <string name="message_option"> OPÇÕES: </string>
+    <string name="message_error_choise_player"> O nome ou a opção não foi preenchida! </string>
+</resources>

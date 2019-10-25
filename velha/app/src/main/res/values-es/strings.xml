@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name"> Tic Tac Toe </string>
+    <string name="message_victory"> Victoria: </string>
+    <string name="message_fail"> Error: </string>
+    <string name="message_draw"> Dibujar: </string>
+    <string name="message_draw_to_user"> ¡OLVIDADO! JUGAR OTRA VEZ ... </string>
+    <string name="display_prefix_player_name"> JUDADOR </string>
+    <string name="message_player_winner"> ¡GANADOR! </string>
+    <string name="message_player_fail"> ¡FALLO! </string>
+    <string name="player_name"> Nombre del jugador </string>
+    <string name="button_start_match"> Comience el partido </string>
+    <string name="message_option"> OPCIONES: </string>
+    <string name="message_error_choise_player"> ¡El nombre o la opción no se completaron! </string>
+</resources>

@@ -25,7 +25,7 @@
             android:id="@+id/playerChoiseNamePlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nome do Jogador"
+            android:hint="@string/player_name"
             android:inputType="textCapCharacters"
             android:singleLine="true"
             android:textColor="@android:color/white" />
@@ -84,9 +84,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:inputType="textCapCharacters"
-        android:text="Iniciar Partida"
+        android:text="@string/button_start_match"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

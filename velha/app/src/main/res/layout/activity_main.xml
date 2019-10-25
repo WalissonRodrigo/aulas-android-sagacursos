@@ -19,35 +19,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Nome Jogador"
+            android:text="@string/player_name"
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/txtVitorias"
+            android:id="@+id/txtVictories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Vitórias: XX"
+            android:text="@string/message_victory"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/txtDerrotas"
+            android:id="@+id/txtFails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Derotas: XX"
+            android:text="@string/message_fail"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/txtEmpates"
+            android:id="@+id/txtDraws"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:text="Empates: XX"
+            android:text="@string/message_draw"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
     </LinearLayout>
@@ -214,12 +214,12 @@
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/circulo_velha" />
 
-        <Button
+        <ImageView
             android:id="@+id/btnTryAgain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jogar Novamente"
             android:visibility="gone"
+            app:srcCompat="@drawable/ic_sync_green_240dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
